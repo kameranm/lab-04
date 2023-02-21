@@ -1,4 +1,4 @@
-"""EE 250L Lab 04 Starter Code
+ """EE 250L Lab 04 Starter Code
 Run vm_sub.py in a separate terminal on your VM."""
 
 import paho.mqtt.client as mqtt
@@ -15,7 +15,10 @@ def on_connect(client, userdata, flags, rc):
 if __name__ == '__main__':
     #get IP address
     ip_address=0 
-    """your code here"""
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+    print("Your computer name is: " + hostname)
+    print("Your computer IP Address is:" + ip_address)
     #create a client object
     client = mqtt.Client()
     
@@ -40,12 +43,25 @@ if __name__ == '__main__':
     time.sleep(1)
 
     while True:
-        #replace user with your USC username in all subscriptions
-        client.publish("user/ipinfo", f"{ip_address}")
+        #replace user with your USC username in all subscriptions - kamody
+        client.publish("kamody/ipinfo", f"{ip_address}")
         print("Publishing ip address")
         time.sleep(4)
 
-        #get date and time 
-        """your code here"""
+        #get date and time
+        #client.publish("kamody/finddate", f"{date}")
+        # print("Publishing date")
+        times = datetime.now()
+        # gets date and time from one place but pastes them parts of different topics
+        time1 = times.strftime("%H:%M:%S")
+        date = times.strftime("%d/%m/%Y")
         #publish date and time in their own topics
-        """your code here"""
+       #  print("Today's date:" + today)
+       #  print("Today's time:" + time)
+        client.publish("kamody/date", f"{date}")
+        print("Publishing date")
+        time.sleep(4)
+        client.publish("kamody/findtime", f"{time1}")
+        print("Publishing time")
+        time.sleep(4)
+
