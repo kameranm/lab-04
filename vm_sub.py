@@ -14,10 +14,13 @@ def on_connect(client, userdata, flags, rc):
 
     print("Connected to server (i.e., broker) with result code "+str(rc))
     #replace user with your USC username in all subscriptions
-    client.subscribe("user/ipinfo")
-    
-    #Add the custom callbacks by indicating the topic and the name of the callback handle
-    client.message_callback_add("user/ipinfo", on_message_from_ipinfo)
+    client.subscribe("kamody/ipinfo")
+    client.subscribe("kamody/date")
+    client.subscribe("kamody/findtime")
+   #Add the custom callbacks by indicating the topic and the name of the callback handle
+    client.message_callback_add("kamody/ipinfo", on_message_from_ipinfo)
+    client.message_callback_add("kamody/date", on_message_from_date)
+    client.message_callback_add("kamody/findtime", on_message_from_findtime)
 
 
 """This object (functions are objects!) serves as the default callback for 
@@ -28,10 +31,15 @@ def on_message(client, userdata, msg):
     print("Default callback - topic: " + msg.topic + "   msg: " + str(msg.payload, "utf-8"))
 
 #Custom message callback.
+# taken from vm pub py, messages declared there
 def on_message_from_ipinfo(client, userdata, message):
-   print("Custom callback  - IP Message: "+message.payload.decode())
+    print("Custom callback  - IP Message: "+message.payload.decode())
 
+def on_message_from_date(client, userdata, message):
+    print("Custom callback  - Dates: "+message.payload.decode())
 
+def on_message_from_findtime(client, userdata, message):
+    print("Custom callback  - Time: "+message.payload.decode())
 
 
 if __name__ == '__main__':
